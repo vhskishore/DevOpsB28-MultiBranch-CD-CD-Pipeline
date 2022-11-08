@@ -131,7 +131,7 @@ pipeline {
             agent { label 'PROD' }
             environment {
             PRODEFAULTAMI = "ami-08d19d3f9e33fad33"
-            PACKER_ACTION = "NO" //YES or NO
+            PACKER_ACTION = "YES" //YES or NO
             TERRAFORM_APPLY = "NO" //YES or NO
             TERRAFORM_DESTROY = "NO" //YES or NO
             ANSIBLE_ACTION = "NO" //YES or NO
