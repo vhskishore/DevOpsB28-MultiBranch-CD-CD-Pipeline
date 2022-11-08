@@ -5,6 +5,8 @@ pipeline {
         PROJECT = "WELCOME TO DEVOPS B28 BATCH - Jenkins Class"
     }
     stages {
+     stage('Run Tests') {
+      parallel {
         stage('Deploy To Development') {
             agent { label 'DEV' }
             environment {
@@ -130,10 +132,10 @@ pipeline {
         stage('Deploy To Production') {
             agent { label 'PROD' }
             environment {
-            PRODEFAULTAMI = "ami-08d19d3f9e33fad33"
-            PACKER_ACTION = "YES" //YES or NO
+            PRODEFAULTAMI = "ami-0e37f15b60de3da17"
+            PACKER_ACTION = "NO" //YES or NO
             TERRAFORM_APPLY = "NO" //YES or NO
-            TERRAFORM_DESTROY = "NO" //YES or NO
+            TERRAFORM_DESTROY = "YES" //YES or NO
             ANSIBLE_ACTION = "NO" //YES or NO
             }
             when {
@@ -213,8 +215,13 @@ pipeline {
                     steps {
                         sh 'sleep 15'
                         sh 'ansible-playbook -i invfile docker-swarm.yml --syntax-check'
-                        //sh 'ansible-playbook -i invfile docker-swarm.yml --check --user ansibleadmin'
-                        sh 'ansible-playbook -i invfile docker-swarm.yml -u ansibleadmin --private-key=/var/lib/jenkins/logs/ansibleadminkey --check'
+                        //Used withCredentials for dry-run as ansible plugin dont have --check option.
+                        withCredentials([file(credentialsId: 'LaptopKey', variable: 'ansiblepvtkey')]) {
+                        sh "sudo cp \$ansiblepvtkey $WORKSPACE"
+                        sh "ls -al"
+                        sh "sudo ansible-playbook -i invfile docker-swarm.yml -u ansibleadmin --private-key=LaptopKey.pem --check"
+                        }
+                          
                     }
                 }
                 stage('Run Ansible Playbook') {
@@ -224,8 +231,8 @@ pipeline {
                         }
                     }
                     steps {
-                        sh 'ansible-playbook -i invfile docker-swarm.yml --user ansibleadmin -vv'
-                        //ansiblePlaybook credentialsId: 'ansibleadmin', disableHostKeyChecking: true, installation: 'Ansible', inventory: 'invfile', playbook: 'docker-swarm.yml'  
+                        //sh 'ansible-playbook -i invfile docker-swarm.yml -u ansibleadmin --private-key=/var/lib/jenkins/logs/ansibleadminkey -vv'
+                        ansiblePlaybook credentialsId: 'ansibleadmin', disableHostKeyChecking: true, installation: 'Ansible', inventory: 'invfile', playbook: 'docker-swarm.yml'  
                     }
                 }
                 stage('Terraform Destroy') {
@@ -244,6 +251,7 @@ pipeline {
                 }
             }
         }
-
+      }
     }
+  }
 }
