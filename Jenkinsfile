@@ -9,7 +9,7 @@ pipeline {
             agent { label 'DEV' }
             environment {
             DEVDEFAULTAMI = "ami-0ba84f9975a421b9c"
-            PACKER_ACTION = "NO" //YES or NO
+            PACKER_ACTION = "YES" //YES or NO
             TERRAFORM_APPLY = "NO" //YES or NO
             ANSIBLE_ACTION = "NO" //YES or NO
             TERRAFORM_DESTROY = "YES" //YES or NO
