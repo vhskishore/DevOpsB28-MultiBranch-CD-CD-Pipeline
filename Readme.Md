@@ -20,3 +20,8 @@
 2. Change PACKER, TERRAFORM_APPLY & ANSIBLE_ACTION to NO and Change TERRAFORM_DESTROY to YES.
 3. Update when expression for branch to dev-destroy or prod-destroy commit.
 4. Push to remote repo and pipeline will run and perform destroy...
+
+
+
+Jenkinsfile:
+Install Multibranch Scan Webhook Trigger for running pipeline based on webhook.
