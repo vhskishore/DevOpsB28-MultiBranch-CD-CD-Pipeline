@@ -5,6 +5,8 @@ pipeline {
         PROJECT = "WELCOME TO DEVOPS B28 BATCH - Jenkins Class"
     }
     stages {
+    stage('Run Tests') {
+            parallel {
         stage('Deploy To Development') {
             agent { label 'DEV' }
             environment {
@@ -130,11 +132,11 @@ pipeline {
         stage('Deploy To Production') {
             agent { label 'PROD' }
             environment {
-            PRODEFAULTAMI = "ami-08d19d3f9e33fad33"
+            PRODEFAULTAMI = "ami-0e37f15b60de3da17"
             PACKER_ACTION = "YES" //YES or NO
             TERRAFORM_APPLY = "YES" //YES or NO
             TERRAFORM_DESTROY = "NO" //YES or NO
-            ANSIBLE_ACTION = "NO" //YES or NO
+            ANSIBLE_ACTION = "YES" //YES or NO
             }
             when {
                 branch 'production'
@@ -244,6 +246,7 @@ pipeline {
                 }
             }
         }
-
+            }
+    }
     }
 }
