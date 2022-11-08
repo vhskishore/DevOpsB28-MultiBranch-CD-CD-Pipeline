@@ -231,8 +231,8 @@ pipeline {
                         }
                     }
                     steps {
-                        sh 'ansible-playbook -i invfile docker-swarm.yml --user ansibleadmin -vv'
-                        //ansiblePlaybook credentialsId: 'ansibleadmin', disableHostKeyChecking: true, installation: 'Ansible', inventory: 'invfile', playbook: 'docker-swarm.yml'  
+                        //sh 'ansible-playbook -i invfile docker-swarm.yml -u ansibleadmin --private-key=/var/lib/jenkins/logs/ansibleadminkey -vv'
+                        ansiblePlaybook credentialsId: 'ansibleadmin', disableHostKeyChecking: true, installation: 'Ansible', inventory: 'invfile', playbook: 'docker-swarm.yml'  
                     }
                 }
                 stage('Terraform Destroy') {
