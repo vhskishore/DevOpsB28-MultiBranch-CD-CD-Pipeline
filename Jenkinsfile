@@ -13,9 +13,9 @@ pipeline {
             environment {
             DEVDEFAULTAMI = "ami-075c86380172ae621"
             PACKER_ACTION = "NO" //YES or NO
-            TERRAFORM_APPLY = "NO" //YES or NO
-            ANSIBLE_ACTION = "NO" //YES or NO
-            TERRAFORM_DESTROY = "YES" //YES or NO
+            TERRAFORM_APPLY = "YES" //YES or NO
+            ANSIBLE_ACTION = "YES" //YES or NO
+            TERRAFORM_DESTROY = "NO" //YES or NO
             }
             when {
                 branch 'development'
