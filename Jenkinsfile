@@ -50,7 +50,7 @@ pipeline {
                     }
                     steps {
                         echo VERSION //Passing Variable From Top
-                        VERSION = '2.0.0'
+                        VERSION = "2.0.0";
                         sh 'pwd'
                         sh 'ls -al'
                         sh 'echo "" >> variables.tf'
