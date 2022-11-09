@@ -49,8 +49,10 @@ pipeline {
                         }
                     }
                     steps {
+                        script {
                         echo VERSION //Passing Variable From Top
                         VERSION = "2.0.0";
+                        }
                         sh 'pwd'
                         sh 'ls -al'
                         sh 'echo "" >> variables.tf'
@@ -65,7 +67,9 @@ pipeline {
                     }
                     steps {
                         withAWS(role:'DevOpsB28JenkinsAssumeRole', roleAccount:'053490018989', duration: 900, roleSessionName: 'jenkins-session') {
+                            script {
                             echo VERSION
+                            }
                             sh 'rm -rf .terraform'
                             sh 'rm -f prod-backend.tf'
                             sh 'terraform init'
