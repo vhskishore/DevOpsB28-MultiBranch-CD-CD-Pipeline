@@ -132,7 +132,6 @@ pipeline {
                     }
                 }
             }
-        }
         post {
             success {
                 echo 'Development Pipeline Is Success.'
@@ -143,6 +142,7 @@ pipeline {
             cleanup {
                 echo 'This Will Run always Development Pipeline.'
             }
+        }
         }
         stage('Deploy To Production') {
             agent { label 'PROD' }
@@ -268,7 +268,6 @@ pipeline {
                     }
                 }
             }
-        }
         post {
             success {
                 echo 'Production Pipeline Is Success'
@@ -280,6 +279,8 @@ pipeline {
                 echo 'This Will Run always in Production Pipeline.'
             }
         }
+        }
+
       }
     }
   }
