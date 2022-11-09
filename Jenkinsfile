@@ -1,11 +1,12 @@
 //Declarative Pipeline
+def VERSION='1.0.0'
 pipeline {
     agent none
     environment {
         PROJECT = "WELCOME TO DEVOPS B28 BATCH - Jenkins Class"
     }
     stages {
-     stage('Run Tests') {
+     stage('For Parallel Stages') {
       parallel {
         stage('Deploy To Development') {
             agent { label 'DEV' }
@@ -48,6 +49,8 @@ pipeline {
                         }
                     }
                     steps {
+                        echo VERSION //Passing Variable From Top
+                        VERSION = '2.0.0';
                         sh 'pwd'
                         sh 'ls -al'
                         sh 'echo "" >> variables.tf'
@@ -62,6 +65,7 @@ pipeline {
                     }
                     steps {
                         withAWS(role:'DevOpsB28JenkinsAssumeRole', roleAccount:'053490018989', duration: 900, roleSessionName: 'jenkins-session') {
+                            echo VERSION
                             sh 'rm -rf .terraform'
                             sh 'rm -f prod-backend.tf'
                             sh 'terraform init'
@@ -129,6 +133,17 @@ pipeline {
                 }
             }
         }
+        post {
+            success {
+                echo 'Development Pipeline Is Success.'
+            }
+            failure {
+                echo 'Development Pipeline Is Failed With Errors.'
+            }
+            cleanup {
+                echo 'This Will Run always Development Pipeline.'
+            }
+        }
         stage('Deploy To Production') {
             agent { label 'PROD' }
             environment {
@@ -150,6 +165,8 @@ pipeline {
                     }
                     steps { //Assume Role in SREEK8S AWS Account
                         withAWS(role:'DevOpsB28JenkinsAssumeRole', roleAccount:'009412611595', duration: 900, roleSessionName: 'jenkins-session') {
+                            echo "${env.BUILD_NUMBER}" //Accessing env variable way 1
+                            sh "echo $BUILD_NUMBER" //Accessing env variable way 2
                             sh 'pwd'
                             sh 'ls -al'
                             sh 'packer build -var-file packer-vars-prod.json packer.json | tee output.txt'
@@ -246,9 +263,21 @@ pipeline {
                             sh 'rm -f dev-backend.tf'
                             sh 'terraform init'
                             sh 'terraform destroy --auto-approve'
+                            //sh 'false' //This will fail the stage.
                         }
                     }
                 }
+            }
+        }
+        post {
+            success {
+                echo 'Production Pipeline Is Success'
+            }
+            failure {
+                'Production Pipeline Is Failed With Errors'
+            }
+            cleanup {
+                echo 'This Will Run always in Production Pipeline.'
             }
         }
       }
