@@ -50,7 +50,7 @@ pipeline {
                     }
                     steps {
                         echo VERSION //Passing Variable From Top
-                        VERSION = '2.0.0';
+                        VERSION = '2.0.0'
                         sh 'pwd'
                         sh 'ls -al'
                         sh 'echo "" >> variables.tf'
@@ -273,7 +273,7 @@ pipeline {
                 echo 'Production Pipeline Is Success'
             }
             failure {
-                'Production Pipeline Is Failed With Errors'
+                echo 'Production Pipeline Is Failed With Errors'
             }
             cleanup {
                 echo 'This Will Run always in Production Pipeline.'
