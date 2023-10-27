@@ -1,4 +1,4 @@
-##Make sure following plugins are installed
+###Make sure following plugins are installed
 0. Create a user ansibleadmin in the jenkins and generate public and private. Replace key contents with your own key in my case Laptopkey
 1. AWS Steps
 2. Blue Ocean
